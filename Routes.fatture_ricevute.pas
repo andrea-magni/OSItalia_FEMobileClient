@@ -14,7 +14,9 @@ implementation
 uses
   FMXER.Navigator, FMXER.ScaffoldForm, FMXER.ListViewFrame
 , FMXER.IconFontsData
-, Utils.UI, Data.Remote, Data.Model;
+, Utils.UI, Data.Remote
+, OSItalia.FE.Classes
+;
 
 procedure fatture_ricevute_definition();
 begin
@@ -28,10 +30,10 @@ begin
         procedure (AListFrame: TListViewFrame)
         begin
           RemoteData.GetFattureRicevute(
-            procedure (const AFatture: TFatture)
+            procedure (const AResponse: TFatturePassiveResponse)
             begin
-              for var LFattura in AFatture do
-                AListFrame.AddItem(LFattura.Cliente, UIUtils.FatturaRicevutaImageIndex);
+              for var LFattura in AResponse do
+                AListFrame.AddItem(LFattura.Fornitore, UIUtils.FatturaRicevutaImageIndex);
 
             end
           , procedure (AError: string)

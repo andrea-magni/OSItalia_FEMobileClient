@@ -29,6 +29,7 @@ uses
   FMXER.UI.Consts, FMXER.UI.Misc, FMXER.Navigator
 , FMXER.ScaffoldForm, FMXER.ContainerForm
 , Routes.home
+, Routes.login
 , Routes.fatture_inviate
 , Routes.fatture_ricevute
 ;
@@ -49,10 +50,11 @@ begin
   Navigator(MainFormStand);
 
   home_definition;
+  login_definition;
   fatture_inviate_definition;
   fatture_ricevute_definition;
 
-  Navigator.RouteTo('home');
+  Navigator.RouteTo('login');
 end;
 
 end.

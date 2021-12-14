@@ -8,8 +8,10 @@ uses
   Routes.fatture_inviate in 'Routes.fatture_inviate.pas',
   Routes.fatture_ricevute in 'Routes.fatture_ricevute.pas',
   Routes.home in 'Routes.home.pas',
-  Data.Model in 'Data.Model.pas',
-  Utils.UI in 'Utils.UI.pas';
+  Utils.UI in 'Utils.UI.pas',
+  OSItalia.FE.Classes in 'Client\OSItalia.FE.Classes.pas',
+  OSItalia.FE.RestClient in 'Client\OSItalia.FE.RestClient.pas',
+  Routes.login in 'Routes.login.pas';
 
 {$R *.res}
 

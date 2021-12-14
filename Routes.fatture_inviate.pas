@@ -14,7 +14,9 @@ implementation
 uses
   FMXER.Navigator, FMXER.ScaffoldForm, FMXER.ListViewFrame
 , FMXER.IconFontsData
-, Data.Remote, Data.Model, Utils.UI;
+, Data.Remote, Utils.UI
+, OSItalia.FE.Classes
+;
 
 procedure fatture_inviate_definition();
 begin
@@ -28,7 +30,7 @@ begin
         procedure (AListFrame: TListViewFrame)
         begin
           RemoteData.GetFattureInviate(
-            procedure (const AFatture: TFatture)
+            procedure (const AFatture: TFattureAttiveResponse)
             begin
               for var LFattura in AFatture do
                 AListFrame.AddItem(LFattura.Cliente, UIUtils.FatturaInviataImageIndex);
