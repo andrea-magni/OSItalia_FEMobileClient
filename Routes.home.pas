@@ -26,14 +26,16 @@ begin
       AHome.SetContentAsFrame<TListViewFrame>(
         procedure (AListFrame: TListViewFrame)
         begin
-          AListFrame.AddItem('Fatture inviate', UIUtils.FatturaInviataImageIndex
+          AListFrame.ItemAppearance := 'ImageListItem';
+
+          AListFrame.AddItem('Fatture inviate', '', UIUtils.FatturaInviataImageIndex
           , procedure
             begin
               Navigator.RouteTo('fatture_inviate');
             end
           );
 
-          AListFrame.AddItem('Fatture ricevute', UIUtils.FatturaRicevutaImageIndex
+          AListFrame.AddItem('Fatture ricevute', '', UIUtils.FatturaRicevutaImageIndex
           , procedure
             begin
               Navigator.RouteTo('fatture_ricevute');

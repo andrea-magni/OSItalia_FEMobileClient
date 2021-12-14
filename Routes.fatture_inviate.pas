@@ -12,7 +12,7 @@ implementation
 
 
 uses
-  FMXER.Navigator, FMXER.ScaffoldForm, FMXER.ListViewFrame
+  FMXER.Navigator, FMXER.ScaffoldForm, FMXER.ListViewFrame, FMXER.LogoFrame
 , FMXER.IconFontsData
 , Data.Remote, Utils.UI
 , OSItalia.FE.Classes
@@ -29,11 +29,14 @@ begin
       AForm.SetContentAsFrame<TListViewFrame>(
         procedure (AListFrame: TListViewFrame)
         begin
+          AListFrame.ItemAppearance := 'ImageListItemBottomDetail';
           RemoteData.GetFattureInviate(
             procedure (const AFatture: TFattureAttiveResponse)
             begin
               for var LFattura in AFatture do
-                AListFrame.AddItem(LFattura.Cliente, UIUtils.FatturaInviataImageIndex);
+                AListFrame.AddItem(LFattura.Cliente
+                , Format('[%s: %s] %.2m', [LFattura.TipoDocumento, LFattura.ID, LFattura.Importo])
+                , UIUtils.FatturaInviataImageIndex);
 
             end
           , procedure (AError: string)
@@ -41,6 +44,13 @@ begin
               AListFrame.ClearItems;
             end
           );
+        end
+      );
+
+      AForm.SetTitleDetailContentAsFrame<TLogoFrame>(
+        procedure (AFrame: TLogoFrame)
+        begin
+
         end
       );
 
