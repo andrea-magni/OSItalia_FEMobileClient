@@ -63,8 +63,6 @@ implementation
 
 {$R *.dfm}
 
-uses CodeSiteLogging;
-
 { TRemoteData }
 
 constructor TRemoteData.Create(AOwner: TComponent);
@@ -129,8 +127,6 @@ begin
     + FatturaPreviewTipo + '/filepreview?'
     + 'Token=' + Token
     + '&ID=' + FatturaPreviewContenutoIDXml;
-
-  CodeSite.Send(Result);
 end;
 
 procedure TRemoteData.GetFattureInviate(const AFattureProc: TFattureAttiveResponseProc; const AErrorProc: TProc<string> = nil);
