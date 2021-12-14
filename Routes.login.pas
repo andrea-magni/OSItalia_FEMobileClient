@@ -3,7 +3,7 @@ unit Routes.login;
 interface
 
 uses
-  Classes, SysUtils
+  Classes, SysUtils, FMX.Dialogs
 ;
 
 procedure login_definition();
@@ -12,7 +12,7 @@ procedure login_definition();
 implementation
 
 uses
-  FMX.Dialogs
+  SubjectStand
 , FMXER.Navigator
 , FMXER.ScaffoldForm, FMXER.ColumnForm
 , FMXER.ListViewFrame, FMXER.LogoFrame, FMXER.EditFrame, FMXER.ButtonFrame
@@ -29,6 +29,7 @@ begin
        AForm.AddFrame<TEditFrame>(80
          , procedure (AFrame: TEditFrame)
            begin
+             AFrame.FocusOnShow := True;
              AFrame.Caption := 'Username:';
              AFrame.OnChangeProc :=
                procedure (ATracking: Boolean)
@@ -37,6 +38,7 @@ begin
                end;
            end
        );
+
        AForm.AddFrame<TEditFrame>(80
          , procedure (AFrame: TEditFrame)
            begin
