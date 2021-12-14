@@ -10,18 +10,6 @@ object MainForm: TMainForm
   OnCreate = FormCreate
   OnClose = FormClose
   DesignerMasterStyle = 0
-  object MainFormStand: TFormStand
-    AnimationShow = 'OnShow*'
-    AnimationHide = 'OnHide*'
-    CommonActionPrefix = 'ca_'
-    DefaultHideAndCloseDeferTimeMS = 100
-    DefaultStyleName = 'fadeInOut'
-    DefaultStandName = 'fadeInOut'
-    StyleBook = Stands
-    StandBook = Stands
-    Left = 80
-    Top = 288
-  end
   object Stands: TStyleBook
     Styles = <
       item
@@ -44,5 +32,17 @@ object MainForm: TMainForm
       end>
     Left = 80
     Top = 352
+  end
+  object MainFormStand: TFormStand
+    AnimationShow = 'OnShow*'
+    AnimationHide = 'OnHide*'
+    CommonActionPrefix = 'ca_'
+    DefaultHideAndCloseDeferTimeMS = 100
+    DefaultStyleName = 'fadeInOut'
+    DefaultStandName = 'fadeInOut'
+    StyleBook = Stands
+    StandBook = Stands
+    Left = 80
+    Top = 288
   end
 end

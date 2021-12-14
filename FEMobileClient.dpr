@@ -14,7 +14,9 @@ uses
   OSItalia.FE.Classes in 'Client\OSItalia.FE.Classes.pas',
   OSItalia.FE.RestClient in 'Client\OSItalia.FE.RestClient.pas',
   Routes.login in 'Routes.login.pas',
-  Routes.bubbles in 'Routes.bubbles.pas';
+  Routes.bubbles in 'Routes.bubbles.pas',
+  Definitions.FatturaToolbar in 'Definitions.FatturaToolbar.pas',
+  Routes.fattura_preview in 'Routes.fattura_preview.pas';
 
 {$R *.res}
 

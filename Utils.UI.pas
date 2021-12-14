@@ -19,14 +19,19 @@ type
   private
     FFatturaInviataImageIndex: Integer;
     FFatturaRicevutaImageIndex: Integer;
+    FFatturaPreviewImageIndex: Integer;
     FBackImageIndex: Integer;
+    FFatturaID: string;
     function GetFatturaInviataImageIndex: Integer;
     function GetFatturaRicevutaImageIndex: Integer;
     function GetBackImageIndex: Integer;
+    function GetFatturaPreviewImageIndex: Integer;
   public
     property FatturaRicevutaImageIndex: Integer read GetFatturaRicevutaImageIndex;
     property FatturaInviataImageIndex: Integer read GetFatturaInviataImageIndex;
+    property FatturaPreviewImageIndex: Integer read GetFatturaPreviewImageIndex;
     property BackImageIndex: Integer read GetBackImageIndex;
+    property FatturaID: string read FFatturaID write FFatturaID;
   end;
 
   function UIUtils: TUIUtils;
@@ -56,6 +61,7 @@ begin
   inherited Create;
   FFatturaInviataImageIndex := -1;
   FFatturaRicevutaImageIndex := -1;
+  FFatturaPreviewImageIndex := -1;
   FBackImageIndex := -1;
 end;
 
@@ -76,6 +82,13 @@ begin
   if FFatturaInviataImageIndex = -1 then
     FFatturaInviataImageIndex := IconFonts.AddIcon(IconFonts.MD.inbox_arrow_up, TAlphaColorRec.Green);
   Result := FFatturaInviataImageIndex;
+end;
+
+function TUIUtils.GetFatturaPreviewImageIndex: Integer;
+begin
+  if FFatturaPreviewImageIndex = -1 then
+    FFatturaPreviewImageIndex := IconFonts.AddIcon(IconFonts.MD.web, TAlphaColorRec.Black);
+  Result := FFatturaPreviewImageIndex;
 end;
 
 function TUIUtils.GetFatturaRicevutaImageIndex: Integer;

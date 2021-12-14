@@ -34,7 +34,7 @@ uses
 , Routes.fatture_inviate
 , Routes.fatture_ricevute
 , Routes.bubbles
-;
+, Routes.fattura_preview;
 
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -61,6 +61,7 @@ begin
   login_definition;
   fatture_inviate_definition;
   fatture_ricevute_definition;
+  fattura_preview_definition;
 
   Navigator.RouteTo('login');
 end;

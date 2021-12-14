@@ -13,7 +13,8 @@ implementation
 
 uses
   FMXER.Navigator, FMXER.ScaffoldForm, FMXER.ListViewFrame, FMXER.LogoFrame
-, FMXER.IconFontsData
+, FMXER.IconFontsData, FMXER.IconFontsGlyphFrame
+, Definitions.FatturaToolbar
 , Data.Remote, Utils.UI
 , OSItalia.FE.Classes
 ;
@@ -29,7 +30,11 @@ begin
       AForm.SetContentAsFrame<TListViewFrame>(
         procedure (AListFrame: TListViewFrame)
         begin
+          AddFatturaToolbar(AForm, AListFrame);
+          RemoteData.FatturaPreviewTipo := 'fattureinviate';
+
           AListFrame.ItemAppearance := 'ImageListItemBottomDetail';
+          AListFrame.ListView.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
 
           AListFrame.ItemBuilderProc :=
             procedure
@@ -37,19 +42,24 @@ begin
               Navigator.RouteTo('bubbles');
 
               RemoteData.GetFattureInviate(
-                procedure (const AFatture: TFattureAttiveResponse)
+                procedure (const AResponse: TFattureAttiveResponse)
                 begin
-                  for var LFattura in AFatture do
-                    AListFrame.AddItem(
+                  AForm.Title := Format('%d fatture inviate', [AResponse.Count]);
+
+                  for var LFattura in AResponse do
+                  begin
+                    var LItem := AListFrame.AddItem(
                       LFattura.Cliente
                     , Format('[%s: %s] %.2m', [LFattura.TipoDocumento, LFattura.ID, LFattura.Importo])
                     , UIUtils.FatturaInviataImageIndex
                     , procedure (const AItem: TListViewItem)
                       begin
-                        ShowMessage(AItem.Data['Fattura.ID'].ToString);
+//                        ShowMessage(AItem.Data['Fattura.ID'].ToString);
                       end
-                    )
-                    .Data['Fattura.ID'] := LFattura.ID;
+                    );
+                    LItem.Data['Fattura.ID'] := LFattura.ID;
+                    LItem.Data['Fattura.ContenutoIDXml'] := LFattura.ContenutoIDXml;
+                  end;
 
                   Navigator.CloseRoute('bubbles');
                 end
@@ -58,16 +68,9 @@ begin
                   AListFrame.ClearItems;
                   Navigator.CloseRoute('bubbles');
                 end
-
               );
+
             end;
-        end
-      );
-
-      AForm.SetTitleDetailContentAsFrame<TLogoFrame>(
-        procedure (AFrame: TLogoFrame)
-        begin
-
         end
       );
 

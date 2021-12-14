@@ -18,7 +18,10 @@ type
     FUsername: string;
     FLoggedIn: Boolean;
     FLoginTime: TDateTime;
+    FFatturaPreviewContenutoIDXml: string;
+    FFatturaPreviewTipo: string;
     procedure SetLoggedIn(const Value: Boolean);
+    function GetToken: string;
   protected
 
     // logon {"Username": "", "Password": ""} --> {"Token": ""} (20 min)
@@ -40,11 +43,15 @@ type
     procedure Login(const AOnSuccess: TProc = nil; const AOnError: TProc<string> = nil);
     procedure GetFattureRicevute(const AFattureProc: TFatturePassiveResponseProc; const AErrorProc: TProc<string> = nil);
     procedure GetFattureInviate(const AFattureProc: TFattureAttiveResponseProc; const AErrorProc: TProc<string> = nil);
+    function GetFatturaPreviewURL(): string;
 
     property Username: string read FUsername write FUsername;
     property Password: string read FPassword write FPassword;
     property LoggedIn: Boolean read FLoggedIn write SetLoggedIn;
     property LoginTime: TDateTime read FLoginTime;
+    property Token: string read GetToken;
+    property FatturaPreviewContenutoIDXml: string read FFatturaPreviewContenutoIDXml write FFatturaPreviewContenutoIDXml;
+    property FatturaPreviewTipo: string read FFatturaPreviewTipo write FFatturaPreviewTipo;
   end;
 
 var
@@ -55,6 +62,8 @@ implementation
 {%CLASSGROUP 'FMX.Controls.TControl'}
 
 {$R *.dfm}
+
+uses CodeSiteLogging;
 
 { TRemoteData }
 
@@ -114,6 +123,16 @@ begin
   end;
 end;
 
+function TRemoteData.GetFatturaPreviewURL: string;
+begin
+  Result := 'http://testservice.ositalia.cloud/portal/'
+    + FatturaPreviewTipo + '/filepreview?'
+    + 'Token=' + Token
+    + '&ID=' + FatturaPreviewContenutoIDXml;
+
+  CodeSite.Send(Result);
+end;
+
 procedure TRemoteData.GetFattureInviate(const AFattureProc: TFattureAttiveResponseProc; const AErrorProc: TProc<string> = nil);
 begin
   TTask.Run(
@@ -156,6 +175,13 @@ begin
       end;
     end
   );
+end;
+
+function TRemoteData.GetToken: string;
+begin
+  Result := '';
+  if LoggedIn then
+    Result := FRESTClient.Token.Token;
 end;
 
 end.
