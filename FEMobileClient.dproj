@@ -265,6 +265,7 @@
         <DCCReference Include="Client\OSItalia.FE.Classes.pas"/>
         <DCCReference Include="Client\OSItalia.FE.RestClient.pas"/>
         <DCCReference Include="Routes.login.pas"/>
+        <DCCReference Include="Routes.bubbles.pas"/>
         <RcItem Include="media\logo.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>LOGO_IMAGE</ResourceId>

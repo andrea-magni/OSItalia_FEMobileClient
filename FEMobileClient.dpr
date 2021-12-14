@@ -13,7 +13,8 @@ uses
   Utils.UI in 'Utils.UI.pas',
   OSItalia.FE.Classes in 'Client\OSItalia.FE.Classes.pas',
   OSItalia.FE.RestClient in 'Client\OSItalia.FE.RestClient.pas',
-  Routes.login in 'Routes.login.pas';
+  Routes.login in 'Routes.login.pas',
+  Routes.bubbles in 'Routes.bubbles.pas';
 
 {$R *.res}
 

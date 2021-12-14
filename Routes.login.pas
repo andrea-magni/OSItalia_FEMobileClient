@@ -74,14 +74,17 @@ begin
              AFrame.OnClickProc :=
                procedure (AFrame: TButtonFrame)
                begin
+                 Navigator.RouteTo('bubbles');
                  RemoteData.Login(
                    procedure
                    begin
+                     Navigator.CloseRoute('bubbles');
                      Navigator.StackPop;
                      Navigator.RouteTo('home');
                    end
                  , procedure(AError: string)
                    begin
+                     Navigator.CloseRoute('bubbles');
                      ShowMessage('Login failed: ' + AError);
                    end
                  );
@@ -89,7 +92,7 @@ begin
            end
        );
      end
-   );
+  );
 end;
 
 end.

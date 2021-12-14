@@ -3,7 +3,7 @@ unit Routes.fatture_inviate;
 interface
 
 uses
-  Classes, SysUtils, UITypes
+  Classes, SysUtils, UITypes, FMX.Dialogs, FMX.ListView.Appearances
 ;
 
 procedure fatture_inviate_definition();
@@ -34,18 +34,31 @@ begin
           AListFrame.ItemBuilderProc :=
             procedure
             begin
+              Navigator.RouteTo('bubbles');
+
               RemoteData.GetFattureInviate(
                 procedure (const AFatture: TFattureAttiveResponse)
                 begin
                   for var LFattura in AFatture do
-                    AListFrame.AddItem(LFattura.Cliente
+                    AListFrame.AddItem(
+                      LFattura.Cliente
                     , Format('[%s: %s] %.2m', [LFattura.TipoDocumento, LFattura.ID, LFattura.Importo])
-                    , UIUtils.FatturaInviataImageIndex);
+                    , UIUtils.FatturaInviataImageIndex
+                    , procedure (const AItem: TListViewItem)
+                      begin
+                        ShowMessage(AItem.Data['Fattura.ID'].ToString);
+                      end
+                    )
+                    .Data['Fattura.ID'] := LFattura.ID;
+
+                  Navigator.CloseRoute('bubbles');
                 end
               , procedure (AError: string)
                 begin
                   AListFrame.ClearItems;
+                  Navigator.CloseRoute('bubbles');
                 end
+
               );
             end;
         end
@@ -61,7 +74,7 @@ begin
       AForm.AddActionButton(IconFonts.ImageList, UIUtils.BackImageIndex
       , procedure
         begin
-          Navigator.StackPop;
+          Navigator.CloseRoute('fatture_inviate');
         end
       );
 

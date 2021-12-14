@@ -3,7 +3,7 @@ unit Routes.home;
 interface
 
 uses
-  Classes, SysUtils
+  Classes, SysUtils, FMX.ListView.Appearances
 ;
 
 procedure home_definition();
@@ -29,14 +29,14 @@ begin
           AListFrame.ItemAppearance := 'ImageListItem';
 
           AListFrame.AddItem('Fatture inviate', '', UIUtils.FatturaInviataImageIndex
-          , procedure
+          , procedure (const AItem: TListViewItem)
             begin
               Navigator.RouteTo('fatture_inviate');
             end
           );
 
           AListFrame.AddItem('Fatture ricevute', '', UIUtils.FatturaRicevutaImageIndex
-          , procedure
+          , procedure (const AItem: TListViewItem)
             begin
               Navigator.RouteTo('fatture_ricevute');
             end

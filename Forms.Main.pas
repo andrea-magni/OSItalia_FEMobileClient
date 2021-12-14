@@ -5,11 +5,12 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, SubjectStand,
-  FormStand;
+  FormStand, FMX.Ani, FMX.Objects;
 
 type
   TMainForm = class(TForm)
     MainFormStand: TFormStand;
+    Stands: TStyleBook;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
   private
@@ -32,6 +33,7 @@ uses
 , Routes.login
 , Routes.fatture_inviate
 , Routes.fatture_ricevute
+, Routes.bubbles
 ;
 
 
@@ -54,6 +56,7 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   Navigator(MainFormStand);
 
+  bubbles_definition;
   home_definition;
   login_definition;
   fatture_inviate_definition;

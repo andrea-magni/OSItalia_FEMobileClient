@@ -3,7 +3,7 @@ unit Data.Remote;
 interface
 
 uses
-  System.SysUtils, System.Classes
+  System.SysUtils, System.Classes, System.Threading
 , OSItalia.FE.Classes, OSItalia.FE.RestClient
 ;
 
@@ -72,18 +72,34 @@ end;
 
 procedure TRemoteData.Login(const AOnSuccess: TProc; const AOnError: TProc<string>);
 begin
-  try
-    FRESTClient.Logon(Username, Password); // sync
-    LoggedIn := True;
-    if Assigned(AOnSuccess) then
-      AOnSuccess();
-  except on E: Exception do
+  TTask.Run(
+    procedure
     begin
-      LoggedIn := False;
-      if Assigned(AOnError) then
-        AOnError(E.ToString);
-    end;
-  end;
+      try
+        FRESTClient.Logon(Username, Password); // sync
+        TThread.Synchronize(nil
+        , procedure
+          begin
+            LoggedIn := True;
+            if Assigned(AOnSuccess) then
+              AOnSuccess();
+          end
+        );
+      except on E: Exception do
+        begin
+          TThread.Synchronize(nil
+          , procedure
+            begin
+              LoggedIn := False;
+              if Assigned(AOnError) then
+                AOnError(E.ToString);
+            end
+          );
+        end;
+      end;
+    end
+  );
+
 end;
 
 procedure TRemoteData.SetLoggedIn(const Value: Boolean);
@@ -100,26 +116,46 @@ end;
 
 procedure TRemoteData.GetFattureInviate(const AFattureProc: TFattureAttiveResponseProc; const AErrorProc: TProc<string> = nil);
 begin
-  var LResponse := TFattureAttiveResponse.Create;
-  try
-    FRESTClient.ElencoFattureAttive(nil, LResponse);
-    if Assigned(AFattureProc) then
-      AFattureProc(LResponse);
-  finally
-    LResponse.Free;
-  end;
+  TTask.Run(
+    procedure
+    begin
+      var LResponse := TFattureAttiveResponse.Create;
+      try
+        FRESTClient.ElencoFattureAttive(nil, LResponse);
+        TThread.Synchronize(nil
+        , procedure
+          begin
+            if Assigned(AFattureProc) then
+              AFattureProc(LResponse);
+          end
+        );
+      finally
+        LResponse.Free;
+      end;
+    end
+  );
 end;
 
 procedure TRemoteData.GetFattureRicevute(const AFattureProc: TFatturePassiveResponseProc; const AErrorProc: TProc<string> = nil);
 begin
-  var LResponse := TFatturePassiveResponse.Create;
-  try
-    FRESTClient.ElencoFatturePassive(nil, LResponse);
-    if Assigned(AFattureProc) then
-      AFattureProc(LResponse);
-  finally
-    LResponse.Free;
-  end;
+  TTask.Run(
+    procedure
+    begin
+      var LResponse := TFatturePassiveResponse.Create;
+      try
+        FRESTClient.ElencoFatturePassive(nil, LResponse);
+        TThread.Synchronize(nil
+        , procedure
+          begin
+            if Assigned(AFattureProc) then
+              AFattureProc(LResponse);
+          end
+        );
+      finally
+        LResponse.Free;
+      end;
+    end
+  );
 end;
 
 end.

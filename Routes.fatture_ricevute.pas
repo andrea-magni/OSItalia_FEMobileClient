@@ -3,7 +3,7 @@ unit Routes.fatture_ricevute;
 interface
 
 uses
-  Classes, SysUtils, UITypes
+  Classes, SysUtils, UITypes, FMX.Dialogs, FMX.ListView.Appearances
 ;
 
 procedure fatture_ricevute_definition();
@@ -34,19 +34,32 @@ begin
           AListFrame.ItemBuilderProc :=
             procedure
             begin
+              Navigator.RouteTo('bubbles');
+
               RemoteData.GetFattureRicevute(
                 procedure (const AResponse: TFatturePassiveResponse)
                 begin
+
                   for var LFattura in AResponse do
                     AListFrame.AddItem(LFattura.Fornitore
                     , Format('[%s: %s] %.2m', [LFattura.TipoDocumento, LFattura.ID, LFattura.Importo])
-                    , UIUtils.FatturaRicevutaImageIndex);
+                    , UIUtils.FatturaRicevutaImageIndex
+                    , procedure (const AItem: TListViewItem)
+                      begin
+                        ShowMessage(AItem.Data['Fattura.ID'].ToString);
+                      end
+                    )
+                    .Data['Fattura.ID'] := LFattura.ID;
+
+                  Navigator.CloseRoute('bubbles');
                 end
               , procedure (AError: string)
                 begin
                   AListFrame.ClearItems;
+                  Navigator.CloseRoute('bubbles');
                 end
               );
+
             end;
         end
       );
@@ -61,7 +74,7 @@ begin
       AForm.AddActionButton(IconFonts.ImageList, UIUtils.BackImageIndex
       , procedure
         begin
-          Navigator.StackPop;
+          Navigator.CloseRoute('fatture_ricevute');
         end
       );
     end
