@@ -265,6 +265,10 @@
         <DCCReference Include="Client\OSItalia.FE.Classes.pas"/>
         <DCCReference Include="Client\OSItalia.FE.RestClient.pas"/>
         <DCCReference Include="Routes.login.pas"/>
+        <RcItem Include="media\logo.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>LOGO_IMAGE</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -412,6 +416,12 @@
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_NotificationIcon_72x72.png" Configuration="Debug" Class="Android_NotificationIcon72">
                     <Platform Name="Android">
                         <RemoteName>ic_notification.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="media\logo.png" Configuration="Debug" Class="ProjectFile">
+                    <Platform Name="Win32">
+                        <RemoteDir>.\</RemoteDir>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

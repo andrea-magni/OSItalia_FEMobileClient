@@ -24,7 +24,12 @@ begin
      'login'
    , procedure (AForm: TColumnForm)
      begin
-       AForm.AddFrame<TLogoFrame>(100);
+       AForm.AddFrame<TLogoFrame>(100
+       , procedure (AFrame: TLogoFrame)
+         begin
+           AFrame.LogoResource := 'LOGO_IMAGE';
+         end
+       );
 
        AForm.AddFrame<TEditFrame>(80
          , procedure (AFrame: TEditFrame)

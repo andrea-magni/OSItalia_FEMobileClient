@@ -3,7 +3,7 @@ unit Utils.UI;
 interface
 
 uses
-  Classes, SysUtils, UITypes;
+  Classes, SysUtils, UITypes, FMX.Graphics, IOUtils;
 
 type
   TUIUtils = class
@@ -13,6 +13,7 @@ type
     class function GetInstance: TUIUtils; static;
   public
     constructor Create; virtual;
+    destructor Destroy; override;
     class property Instance: TUIUtils read GetInstance;
     class destructor ClassDestroy;
   private
@@ -33,7 +34,7 @@ type
 implementation
 
 uses
-  FMXER.IconFontsData
+  FMXER.IconFontsData, System.Types
 ;
 
 
@@ -56,6 +57,11 @@ begin
   FFatturaInviataImageIndex := -1;
   FFatturaRicevutaImageIndex := -1;
   FBackImageIndex := -1;
+end;
+
+destructor TUIUtils.Destroy;
+begin
+  inherited;
 end;
 
 function TUIUtils.GetBackImageIndex: Integer;
