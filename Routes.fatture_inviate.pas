@@ -30,20 +30,24 @@ begin
         procedure (AListFrame: TListViewFrame)
         begin
           AListFrame.ItemAppearance := 'ImageListItemBottomDetail';
-          RemoteData.GetFattureInviate(
-            procedure (const AFatture: TFattureAttiveResponse)
-            begin
-              for var LFattura in AFatture do
-                AListFrame.AddItem(LFattura.Cliente
-                , Format('[%s: %s] %.2m', [LFattura.TipoDocumento, LFattura.ID, LFattura.Importo])
-                , UIUtils.FatturaInviataImageIndex);
 
-            end
-          , procedure (AError: string)
+          AListFrame.ItemBuilderProc :=
+            procedure
             begin
-              AListFrame.ClearItems;
-            end
-          );
+              RemoteData.GetFattureInviate(
+                procedure (const AFatture: TFattureAttiveResponse)
+                begin
+                  for var LFattura in AFatture do
+                    AListFrame.AddItem(LFattura.Cliente
+                    , Format('[%s: %s] %.2m', [LFattura.TipoDocumento, LFattura.ID, LFattura.Importo])
+                    , UIUtils.FatturaInviataImageIndex);
+                end
+              , procedure (AError: string)
+                begin
+                  AListFrame.ClearItems;
+                end
+              );
+            end;
         end
       );
 

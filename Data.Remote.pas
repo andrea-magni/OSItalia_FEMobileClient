@@ -16,6 +16,9 @@ type
     FRESTClient: TRestClient;
     FPassword: string;
     FUsername: string;
+    FLoggedIn: Boolean;
+    FLoginTime: TDateTime;
+    procedure SetLoggedIn(const Value: Boolean);
   protected
 
     // logon {"Username": "", "Password": ""} --> {"Token": ""} (20 min)
@@ -40,6 +43,8 @@ type
 
     property Username: string read FUsername write FUsername;
     property Password: string read FPassword write FPassword;
+    property LoggedIn: Boolean read FLoggedIn write SetLoggedIn;
+    property LoginTime: TDateTime read FLoginTime;
   end;
 
 var
@@ -69,11 +74,27 @@ procedure TRemoteData.Login(const AOnSuccess: TProc; const AOnError: TProc<strin
 begin
   try
     FRESTClient.Logon(Username, Password); // sync
+    LoggedIn := True;
     if Assigned(AOnSuccess) then
       AOnSuccess();
   except on E: Exception do
-    if Assigned(AOnError) then
-      AOnError(E.ToString);
+    begin
+      LoggedIn := False;
+      if Assigned(AOnError) then
+        AOnError(E.ToString);
+    end;
+  end;
+end;
+
+procedure TRemoteData.SetLoggedIn(const Value: Boolean);
+begin
+  if FLoggedIn <> Value then
+  begin
+    FLoggedIn := Value;
+    if FLoggedIn then
+      FLoginTime := Now
+    else
+      FLoginTime := 0.0;
   end;
 end;
 
