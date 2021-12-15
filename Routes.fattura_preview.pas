@@ -34,8 +34,7 @@ begin
           except on E:Exception do
             AForm.ShowSnackBar(E.ToString, 3000);
           end;
-        end
-      );
+        end);
 
       AForm.SetTitleDetailContentAsForm<TRowForm>(
         procedure(AForm: TRowForm)
@@ -51,13 +50,10 @@ begin
                 begin
                   Navigator.CloseRoute('fattura_preview');
                 end;
-            end
-          );
+            end);
 
-        end
-      );
-    end
-  );
+        end);
+    end);
 end;
 
 end.

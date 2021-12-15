@@ -28,15 +28,15 @@ begin
       AForm.Title := 'Fatture inviate';
 
       AForm.SetContentAsFrame<TListViewFrame>(
-        procedure (AListFrame: TListViewFrame)
+        procedure (AFrame: TListViewFrame)
         begin
-          AddFatturaToolbar(AForm, AListFrame);
+          AddFatturaToolbar(AForm, AFrame);
           RemoteData.FatturaPreviewTipo := 'fattureinviate';
 
-          AListFrame.ItemAppearance := 'ImageListItemBottomDetail';
-          AListFrame.ListView.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+          AFrame.ItemAppearance := 'ImageListItemBottomDetail';
+          AFrame.ListView.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
 
-          AListFrame.ItemBuilderProc :=
+          AFrame.ItemBuilderProc :=
             procedure
             begin
               Navigator.RouteTo('bubbles');
@@ -48,15 +48,13 @@ begin
 
                   for var LFattura in AResponse do
                   begin
-                    var LItem := AListFrame.AddItem(
-                      LFattura.Cliente
+                    var LItem := AFrame.AddItem(LFattura.Cliente
                     , Format('[%s: %s] %.2m', [LFattura.TipoDocumento, LFattura.ID, LFattura.Importo])
                     , UIUtils.FatturaInviataImageIndex
                     , procedure (const AItem: TListViewItem)
                       begin
 //                        ShowMessage(AItem.Data['Fattura.ID'].ToString);
-                      end
-                    );
+                      end);
                     LItem.Data['Fattura.ID'] := LFattura.ID;
                     LItem.Data['Fattura.ContenutoIDXml'] := LFattura.ContenutoIDXml;
                   end;
@@ -65,24 +63,19 @@ begin
                 end
               , procedure (AError: string)
                 begin
-                  AListFrame.ClearItems;
+                  AFrame.ClearItems;
                   Navigator.CloseRoute('bubbles');
-                end
-              );
+                end);
 
             end;
-        end
-      );
+        end);
 
       AForm.AddActionButton(IconFonts.ImageList, UIUtils.BackImageIndex
       , procedure
         begin
           Navigator.CloseRoute('fatture_inviate');
-        end
-      );
-
-    end
-  );
+        end);
+    end);
 end;
 
 end.

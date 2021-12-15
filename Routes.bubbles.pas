@@ -19,12 +19,11 @@ uses
 procedure bubbles_definition();
 begin
   Navigator.DefineRoute<TContainerForm>(
-     'bubbles'
+    'bubbles'
   , procedure (AForm: TContainerForm)
     begin
       AForm.SetContentAsFrame<TActivityBubblesFrame>();
-    end
-  );
+    end);
 end;
 
 

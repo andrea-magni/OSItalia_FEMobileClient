@@ -32,19 +32,15 @@ begin
           , procedure (const AItem: TListViewItem)
             begin
               Navigator.RouteTo('fatture_inviate');
-            end
-          );
+            end);
 
           AListFrame.AddItem('Fatture ricevute', '', UIUtils.FatturaRicevutaImageIndex
           , procedure (const AItem: TListViewItem)
             begin
               Navigator.RouteTo('fatture_ricevute');
-            end
-          );
-        end
-      );
-    end
-  );
+            end);
+        end);
+    end);
 end;
 
 end.
