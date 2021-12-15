@@ -39,7 +39,7 @@ begin
           AFrame.ItemBuilderProc :=
             procedure
             begin
-              Navigator.RouteTo('bubbles');
+              Navigator.RouteTo('bubbles', True);
 
               RemoteData.GetFattureRicevute(
                 procedure (const AResponse: TFatturePassiveResponse)
@@ -59,12 +59,12 @@ begin
                     LItem.Data['Fattura.ContenutoIDXml'] := LFattura.ContenutoXmlID;
                   end;
 
-                  Navigator.CloseRoute('bubbles');
+                  Navigator.CloseRoute('bubbles', True);
                 end
               , procedure (AError: string)
                 begin
                   AFrame.ClearItems;
-                  Navigator.CloseRoute('bubbles');
+                  Navigator.CloseRoute('bubbles', True);
                 end);
 
             end;

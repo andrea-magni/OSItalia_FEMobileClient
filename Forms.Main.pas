@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Types, System.UITypes, System.Classes, System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, SubjectStand,
-  FormStand, FMX.Ani, FMX.Objects;
+  FormStand, FMX.Ani, FMX.Objects, FMX.Platform, FMX.VirtualKeyboard, StrUtils;
 
 type
   TMainForm = class(TForm)
@@ -13,10 +13,11 @@ type
     Stands: TStyleBook;
     procedure FormCreate(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char;
+      Shift: TShiftState);
   private
-    { Private declarations }
+    FVirtualKeyboardService : IFMXVirtualKeyboardService;
   public
-    { Public declarations }
   end;
 
 var
@@ -34,7 +35,8 @@ uses
 , Routes.fatture_inviate
 , Routes.fatture_ricevute
 , Routes.bubbles
-, Routes.fattura_preview;
+, Routes.fattura_preview
+;
 
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -54,7 +56,12 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
+  TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardService, FVirtualKeyboardService);
+
   Navigator(MainFormStand);
+
+//  Navigator.OnCreateRoute := procedure (AName: string) begin Log('+ ' + AName); end;
+//  Navigator.OnCloseRoute  := procedure (AName: string) begin Log('- ' + AName); end;
 
   bubbles_definition;
   home_definition;
@@ -64,6 +71,24 @@ begin
   fattura_preview_definition;
 
   Navigator.RouteTo('login');
+end;
+
+procedure TMainForm.FormKeyUp(Sender: TObject; var Key: Word; var KeyChar: Char;
+  Shift: TShiftState);
+begin
+  if (Key = vkHardwareBack) {$IFDEF MSWINDOWS}or (Key = vkEscape){$ENDIF} then
+  begin
+    if Assigned(FVirtualKeyboardService) and (TVirtualKeyboardState.Visible in FVirtualKeyboardService.VirtualKeyBoardState) then
+    begin
+      // Back button pressed, keyboard visible, so do nothing...
+    end else
+    begin
+      var LPeek := Navigator.Stack.Peek;
+      if (Navigator.Stack.Count > 0) and (IndexStr(LPeek, ['home', 'login']) = -1) then
+        Navigator.StackPop;
+      Key := 0;
+    end;
+  end
 end;
 
 end.

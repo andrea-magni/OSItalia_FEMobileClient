@@ -9,6 +9,7 @@ object MainForm: TMainForm
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
   OnClose = FormClose
+  OnKeyUp = FormKeyUp
   DesignerMasterStyle = 0
   object Stands: TStyleBook
     Styles = <
