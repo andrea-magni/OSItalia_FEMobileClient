@@ -3,7 +3,7 @@ unit Data.Remote;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Threading
+  System.SysUtils, System.Classes, System.Threading, StrUtils
 , OSItalia.FE.Classes, OSItalia.FE.RestClient
 ;
 
@@ -18,24 +18,16 @@ type
     FUsername: string;
     FLoggedIn: Boolean;
     FLoginTime: TDateTime;
-    FFatturaPreviewContenutoIDXml: string;
-    FFatturaPreviewTipo: string;
+    FFattureAttiveResponse: TFattureAttiveResponse;
+    FFatturePassiveResponse: TFatturePassiveResponse;
+    FFatturaSelezionata: TObject;
     procedure SetLoggedIn(const Value: Boolean);
     function GetToken: string;
+    function GetFatturaSelezionataAttiva: TFatturaAttiva;
+    function GetFatturaSelezionataIsAttiva: Boolean;
+    function GetFatturaSelezionataIsPassiva: Boolean;
+    function GetFatturaSelezionataPassiva: TFatturaPassiva;
   protected
-
-    // logon {"Username": "", "Password": ""} --> {"Token": ""} (20 min)
-    // renewtoken {"Token": ""} --> {"Token": ""}
-    // changepassword {"OldPassword": "", "NewPassword": ""}
-
-    // /portal/fattureinviate (filtro) --> {"count": 123, "data": [{}, {}]}
-    // /portal/fattureinviate/notifiche {"FatturaID": ""} --> [{"TipoNotificaID"}, {}]
-    // /portal/fattureinviate/file ?Token=JWT&ID=&FileName=
-    // /portal/fattureinviate/filepreview ?Token=JWT&ID=
-
-    // /portal/fatturericevute
-
-    // download massivo
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -50,8 +42,12 @@ type
     property LoggedIn: Boolean read FLoggedIn write SetLoggedIn;
     property LoginTime: TDateTime read FLoginTime;
     property Token: string read GetToken;
-    property FatturaPreviewContenutoIDXml: string read FFatturaPreviewContenutoIDXml write FFatturaPreviewContenutoIDXml;
-    property FatturaPreviewTipo: string read FFatturaPreviewTipo write FFatturaPreviewTipo;
+
+    property FatturaSelezionata: TObject read FFatturaSelezionata write FFatturaSelezionata;
+    property FatturaSelezionataIsAttiva: Boolean read GetFatturaSelezionataIsAttiva;
+    property FatturaSelezionataIsPassiva: Boolean read GetFatturaSelezionataIsPassiva;
+    property FatturaSelezionataAttiva: TFatturaAttiva read GetFatturaSelezionataAttiva;
+    property FatturaSelezionataPassiva: TFatturaPassiva read GetFatturaSelezionataPassiva;
   end;
 
 var
@@ -69,10 +65,14 @@ constructor TRemoteData.Create(AOwner: TComponent);
 begin
   inherited;
   FRESTClient := TRestClient.Create;
+  FFattureAttiveResponse := TFattureAttiveResponse.Create;
+  FFatturePassiveResponse := TFatturePassiveResponse.Create;
 end;
 
 destructor TRemoteData.Destroy;
 begin
+  FreeAndNil(FFatturePassiveResponse);
+  FreeAndNil(FFattureAttiveResponse);
   FreeAndNil(FRESTClient);
   inherited;
 end;
@@ -122,11 +122,47 @@ begin
 end;
 
 function TRemoteData.GetFatturaPreviewURL: string;
+var
+  LTipo: string;
+  LID: string;
 begin
-  Result := 'http://testservice.ositalia.cloud/portal/'
-    + FatturaPreviewTipo + '/filepreview?'
-    + 'Token=' + Token
-    + '&ID=' + FatturaPreviewContenutoIDXml;
+  if not Assigned(FatturaSelezionata) then
+    raise Exception.Create('Nessuna fattura selezionata');
+
+  if FatturaSelezionataIsAttiva then
+  begin
+    LTipo := 'fattureinviate';
+    LID := FatturaSelezionataAttiva.ContenutoIDXml;
+  end
+  else if FatturaSelezionataIsPassiva then
+  begin
+    LTipo := 'fatturericevute';
+    LID := FatturaSelezionataPassiva.ContenutoXmlID;
+  end;
+
+  Result :=
+      'http://testservice.ositalia.cloud/portal/' + LTipo + '/filepreview'
+    + '?' + 'Token=' + Token + '&ID=' + LID;
+end;
+
+function TRemoteData.GetFatturaSelezionataAttiva: TFatturaAttiva;
+begin
+  Result := FFatturaSelezionata as TFatturaAttiva;
+end;
+
+function TRemoteData.GetFatturaSelezionataIsAttiva: Boolean;
+begin
+  Result := FFatturaSelezionata is TFatturaAttiva;
+end;
+
+function TRemoteData.GetFatturaSelezionataIsPassiva: Boolean;
+begin
+  Result := FFatturaSelezionata is TFatturaPassiva;
+end;
+
+function TRemoteData.GetFatturaSelezionataPassiva: TFatturaPassiva;
+begin
+  Result := FFatturaSelezionata as TFatturaPassiva;
 end;
 
 procedure TRemoteData.GetFattureInviate(const AFattureProc: TFattureAttiveResponseProc; const AErrorProc: TProc<string> = nil);
@@ -134,21 +170,13 @@ begin
   TTask.Run(
     procedure
     begin
-      var LResponse := TFattureAttiveResponse.Create;
-      try
-        FRESTClient.ElencoFattureAttive(nil, LResponse);
-        TThread.Synchronize(nil
-        , procedure
-          begin
-            if Assigned(AFattureProc) then
-              AFattureProc(LResponse);
-          end
-        );
-      finally
-        LResponse.Free;
-      end;
-    end
-  );
+      FRESTClient.ElencoFattureAttive(nil, FFattureAttiveResponse);
+      TThread.Synchronize(nil, procedure
+                               begin
+                                 if Assigned(AFattureProc) then
+                                   AFattureProc(FFattureAttiveResponse);
+                               end);
+    end);
 end;
 
 procedure TRemoteData.GetFattureRicevute(const AFattureProc: TFatturePassiveResponseProc; const AErrorProc: TProc<string> = nil);
@@ -156,21 +184,13 @@ begin
   TTask.Run(
     procedure
     begin
-      var LResponse := TFatturePassiveResponse.Create;
-      try
-        FRESTClient.ElencoFatturePassive(nil, LResponse);
-        TThread.Synchronize(nil
-        , procedure
-          begin
-            if Assigned(AFattureProc) then
-              AFattureProc(LResponse);
-          end
-        );
-      finally
-        LResponse.Free;
-      end;
-    end
-  );
+      FRESTClient.ElencoFatturePassive(nil, FFatturePassiveResponse);
+      TThread.Synchronize(nil, procedure
+                               begin
+                                 if Assigned(AFattureProc) then
+                                   AFattureProc(FFatturePassiveResponse);
+                               end);
+    end);
 end;
 
 function TRemoteData.GetToken: string;

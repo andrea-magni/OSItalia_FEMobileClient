@@ -31,7 +31,6 @@ begin
         procedure (AFrame: TListViewFrame)
         begin
           AddFatturaToolbar(AForm, AFrame);
-          RemoteData.FatturaPreviewTipo := 'fattureinviate';
 
           AFrame.ItemAppearance := 'ImageListItemBottomDetail';
           AFrame.ListView.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
@@ -48,15 +47,15 @@ begin
 
                   for var LFattura in AResponse do
                   begin
-                    var LItem := AFrame.AddItem(LFattura.Cliente
-                    , Format('[%s: %s] %.2m', [LFattura.TipoDocumento, LFattura.ID, LFattura.Importo])
+                    var LItem := AFrame.AddItem(
+                      LFattura.Cliente + ', Importo: € ' + FormatFloat('#,#0.00', LFattura.Importo)
+                    , Format('[%s] Stato: %s ID: %s', [LFattura.IdentificativoSDI, LFattura.Stato, LFattura.ID])
                     , UIUtils.FatturaInviataImageIndex
                     , procedure (const AItem: TListViewItem)
                       begin
 //                        ShowMessage(AItem.Data['Fattura.ID'].ToString);
                       end);
-                    LItem.Data['Fattura.ID'] := LFattura.ID;
-                    LItem.Data['Fattura.ContenutoIDXml'] := LFattura.ContenutoIDXml;
+                    LItem.TagObject := LFattura;
                   end;
 
                   Navigator.CloseRoute('bubbles', True);

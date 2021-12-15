@@ -30,7 +30,8 @@ begin
             begin
               if Assigned(AListFrame.SelectedItem) then
               begin
-                RemoteData.FatturaPreviewContenutoIDXml := AListFrame.SelectedItem.Data['Fattura.ContenutoIDXml'].ToString;
+                RemoteData.FatturaSelezionata := AListFrame.SelectedItem.TagObject;
+
                 Navigator.RouteTo('fattura_preview');
               end;
             end;
