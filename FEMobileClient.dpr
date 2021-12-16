@@ -16,7 +16,8 @@ uses
   Routes.login in 'Routes.login.pas',
   Routes.bubbles in 'Routes.bubbles.pas',
   Definitions.FatturaToolbar in 'Definitions.FatturaToolbar.pas',
-  Routes.fattura_preview in 'Routes.fattura_preview.pas';
+  Routes.fattura_preview in 'Routes.fattura_preview.pas',
+  Routes.change_password in 'Routes.change_password.pas';
 
 {$R *.res}
 

@@ -20,13 +20,16 @@ type
     FFatturaInviataImageIndex: Integer;
     FFatturaRicevutaImageIndex: Integer;
     FFatturaPreviewImageIndex: Integer;
+    FChangePasswordImageIndex: Integer;
     FBackImageIndex: Integer;
     FFatturaID: string;
     function GetFatturaInviataImageIndex: Integer;
     function GetFatturaRicevutaImageIndex: Integer;
     function GetBackImageIndex: Integer;
     function GetFatturaPreviewImageIndex: Integer;
+    function GetChangePasswordImageIndex: Integer;
   public
+    property ChangePasswordImageIndex: Integer read GetChangePasswordImageIndex;
     property FatturaRicevutaImageIndex: Integer read GetFatturaRicevutaImageIndex;
     property FatturaInviataImageIndex: Integer read GetFatturaInviataImageIndex;
     property FatturaPreviewImageIndex: Integer read GetFatturaPreviewImageIndex;
@@ -59,6 +62,7 @@ end;
 constructor TUIUtils.Create;
 begin
   inherited Create;
+  FChangePasswordImageIndex := -1;
   FFatturaInviataImageIndex := -1;
   FFatturaRicevutaImageIndex := -1;
   FFatturaPreviewImageIndex := -1;
@@ -75,6 +79,13 @@ begin
   if FBackImageIndex = -1 then
     FBackImageIndex := IconFonts.AddIcon(IconFonts.MD.arrow_left, TAlphaColorRec.Black);
   Result := FBackImageIndex;
+end;
+
+function TUIUtils.GetChangePasswordImageIndex: Integer;
+begin
+  if FChangePasswordImageIndex = -1 then
+    FChangePasswordImageIndex := IconFonts.AddIcon(IconFonts.MD.form_textbox_password, TAlphaColorRec.Black);
+  Result := FChangePasswordImageIndex;
 end;
 
 function TUIUtils.GetFatturaInviataImageIndex: Integer;

@@ -21,6 +21,8 @@ type
     FFattureAttiveResponse: TFattureAttiveResponse;
     FFatturePassiveResponse: TFatturePassiveResponse;
     FFatturaSelezionata: TObject;
+    FNewPassword: string;
+    FOldPassword: string;
     procedure SetLoggedIn(const Value: Boolean);
     function GetToken: string;
     function GetFatturaSelezionataAttiva: TFatturaAttiva;
@@ -33,12 +35,15 @@ type
     destructor Destroy; override;
 
     procedure Login(const AOnSuccess: TProc = nil; const AOnError: TProc<string> = nil);
+    procedure CambiaPassword(const AOnSuccess: TProc = nil; const AOnError: TProc<string> = nil);
     procedure GetFattureRicevute(const AFattureProc: TFatturePassiveResponseProc; const AErrorProc: TProc<string> = nil);
     procedure GetFattureInviate(const AFattureProc: TFattureAttiveResponseProc; const AErrorProc: TProc<string> = nil);
     function GetFatturaPreviewURL(): string;
 
     property Username: string read FUsername write FUsername;
     property Password: string read FPassword write FPassword;
+    property OldPassword: string read FOldPassword write FOldPassword;
+    property NewPassword: string read FNewPassword write FNewPassword;
     property LoggedIn: Boolean read FLoggedIn write SetLoggedIn;
     property LoginTime: TDateTime read FLoginTime;
     property Token: string read GetToken;
@@ -60,6 +65,36 @@ implementation
 {$R *.dfm}
 
 { TRemoteData }
+
+procedure TRemoteData.CambiaPassword(const AOnSuccess: TProc;
+  const AOnError: TProc<string>);
+begin
+  TTask.Run(
+    procedure
+    begin
+      try
+        FRESTClient.ChangePassword(OldPassword, NewPassword); // sync
+        TThread.Synchronize(nil
+        , procedure
+          begin
+            if Assigned(AOnSuccess) then
+              AOnSuccess();
+          end
+        );
+      except on E: Exception do
+        begin
+          TThread.Synchronize(nil
+          , procedure
+            begin
+              if Assigned(AOnError) then
+                AOnError(E.ToString);
+            end
+          );
+        end;
+      end;
+    end
+  );
+end;
 
 constructor TRemoteData.Create(AOwner: TComponent);
 begin

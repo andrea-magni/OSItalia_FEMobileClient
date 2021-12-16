@@ -36,7 +36,7 @@ uses
 , Routes.fatture_ricevute
 , Routes.bubbles
 , Routes.fattura_preview
-;
+, Routes.change_password;
 
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -65,9 +65,13 @@ begin
   bubbles_definition;
   home_definition;
   login_definition;
+  change_password_definition;
   fatture_inviate_definition;
   fatture_ricevute_definition;
   fattura_preview_definition;
+
+  // UI consts
+//  TAppColors.PrimaryColor := TAppColors.MATERIAL_TEAL_400;
 
   // Start app
   Navigator.RouteTo('login');

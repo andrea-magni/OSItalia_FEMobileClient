@@ -39,6 +39,14 @@ begin
             begin
               Navigator.RouteTo('fatture_ricevute');
             end);
+
+          AListFrame.AddItem('Cambia password', '', UIUtils.ChangePasswordImageIndex
+          , procedure (const AItem: TListViewItem)
+            begin
+              Navigator.RouteTo('change_password');
+            end);
+
+
         end);
     end);
 end;
