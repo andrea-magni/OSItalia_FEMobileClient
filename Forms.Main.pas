@@ -41,6 +41,7 @@ uses
 
 procedure TMainForm.FormClose(Sender: TObject; var Action: TCloseAction);
 begin
+  // Before closing the app, close all routes (to avoid memory leaks)
   if Navigator.ActiveRoutes.Count > 0 then
   begin
     Action := TCloseAction.caNone;
@@ -58,11 +59,9 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardService, FVirtualKeyboardService);
 
-  Navigator(MainFormStand);
+  Navigator(MainFormStand); // FMXER Initialization
 
-//  Navigator.OnCreateRoute := procedure (AName: string) begin Log('+ ' + AName); end;
-//  Navigator.OnCloseRoute  := procedure (AName: string) begin Log('- ' + AName); end;
-
+  // Routes definitions
   bubbles_definition;
   home_definition;
   login_definition;
@@ -70,6 +69,7 @@ begin
   fatture_ricevute_definition;
   fattura_preview_definition;
 
+  // Start app
   Navigator.RouteTo('login');
 end;
 

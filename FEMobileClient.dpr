@@ -22,7 +22,7 @@ uses
 
 begin
   Application.Initialize;
-  {$IFDEF MSWINDOWS} ReportMemoryLeaksOnShutdown := True; {$ENDIF}
+//  {$IFDEF MSWINDOWS} ReportMemoryLeaksOnShutdown := True; {$ENDIF}
   Application.CreateForm(TRemoteData, RemoteData);
   Application.CreateForm(TMainForm, MainForm);
   Application.Run;

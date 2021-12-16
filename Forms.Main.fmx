@@ -2,8 +2,8 @@ object MainForm: TMainForm
   Left = 0
   Top = 0
   Caption = 'FEMobileClient'
-  ClientHeight = 636
-  ClientWidth = 458
+  ClientHeight = 432
+  ClientWidth = 308
   FormFactor.Width = 320
   FormFactor.Height = 480
   FormFactor.Devices = [Desktop]
@@ -31,8 +31,8 @@ object MainForm: TMainForm
           727456616C7565050000000000000080FF3F0953746F7056616C756505000000
           00000000000000000000}
       end>
-    Left = 80
-    Top = 352
+    Left = 136
+    Top = 128
   end
   object MainFormStand: TFormStand
     AnimationShow = 'OnShow*'
@@ -43,7 +43,7 @@ object MainForm: TMainForm
     DefaultStandName = 'fadeInOut'
     StyleBook = Stands
     StandBook = Stands
-    Left = 80
-    Top = 288
+    Left = 136
+    Top = 72
   end
 end

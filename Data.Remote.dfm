@@ -1,5 +1,5 @@
 object RemoteData: TRemoteData
-  Height = 760
-  Width = 1096
+  Height = 627
+  Width = 929
   PixelsPerInch = 144
 end

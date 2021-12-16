@@ -33,7 +33,8 @@ begin
           AddFatturaToolbar(AForm, AFrame);
 
           AFrame.ItemAppearance := 'ImageListItemBottomDetail';
-          AFrame.ListView.ItemAppearanceObjects.ItemObjects.Accessory.Visible := False;
+          AFrame.AccessoryVisible := False;
+          AFrame.SearchVisible := True;
 
           AFrame.ItemBuilderProc :=
             procedure

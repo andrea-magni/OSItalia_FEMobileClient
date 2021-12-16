@@ -87,7 +87,7 @@ end;
 function TUIUtils.GetFatturaPreviewImageIndex: Integer;
 begin
   if FFatturaPreviewImageIndex = -1 then
-    FFatturaPreviewImageIndex := IconFonts.AddIcon(IconFonts.MD.web, TAlphaColorRec.Black);
+    FFatturaPreviewImageIndex := IconFonts.AddIcon(IconFonts.MD.loupe, TAlphaColorRec.Black);
   Result := FFatturaPreviewImageIndex;
 end;
 
