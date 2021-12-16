@@ -91,7 +91,7 @@ end;
 function TUIUtils.GetFatturaInviataImageIndex: Integer;
 begin
   if FFatturaInviataImageIndex = -1 then
-    FFatturaInviataImageIndex := IconFonts.AddIcon(IconFonts.MD.inbox_arrow_up, TAlphaColorRec.Green);
+    FFatturaInviataImageIndex := IconFonts.AddIcon(IconFonts.MD.cloud_upload, TAlphaColorRec.Green);
   Result := FFatturaInviataImageIndex;
 end;
 
@@ -105,7 +105,7 @@ end;
 function TUIUtils.GetFatturaRicevutaImageIndex: Integer;
 begin
   if FFatturaRicevutaImageIndex = -1 then
-    FFatturaRicevutaImageIndex := IconFonts.AddIcon(IconFonts.MD.inbox_arrow_down, TAlphaColorRec.Red);
+    FFatturaRicevutaImageIndex := IconFonts.AddIcon(IconFonts.MD.cloud_download, TAlphaColorRec.Red);
   Result := FFatturaRicevutaImageIndex;
 end;
 

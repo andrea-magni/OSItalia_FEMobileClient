@@ -57,7 +57,8 @@ end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardService, FVirtualKeyboardService);
+  TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardService
+    , FVirtualKeyboardService);
 
   Navigator(MainFormStand); // FMXER Initialization
 
