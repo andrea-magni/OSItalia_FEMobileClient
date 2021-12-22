@@ -87,7 +87,9 @@ begin
                                         end;
                 end);
         end);
-    end);
+    end
+  , nil
+  , 'lightbox');
 end;
 
 end.
